@@ -97,7 +97,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         aux = aux + line;
                     }
                     JSONObject json = new JSONObject(aux);
-
                     //jsonArray con los datos a sacar
                     JSONArray jsArray = json.getJSONArray("items");
                     int i = 0;
@@ -119,6 +118,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             return resul;
         }
+
 
         protected void onPostExecute(Boolean result) {
             progres.dismiss();
@@ -161,6 +161,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     //funcion que carga en el mapa todos los items
+    //parametro de entrada ArrayList
     public void cargarItemsMaps(ArrayList list){
         int i=0;
         while(i<list.size()){
