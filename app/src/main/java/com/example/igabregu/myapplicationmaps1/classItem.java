@@ -18,6 +18,14 @@ public class classItem
     private String kind;
 
 
+    public classItem(Double locationLatitude, Double locationLongitude, String code, int radius, int radiusInMeter, String kind) {
+        this.locationLatitude = locationLatitude;
+        this.locationLongitude = locationLongitude;
+        this.code = code;
+        this.radius = radius;
+        this.radiusInMeter = radiusInMeter;
+        this.kind = kind;
+    }
 
     public classItem(JSONObject json) {
         try{
