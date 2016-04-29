@@ -10,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Vibrator;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -64,6 +65,7 @@ public class MapsActivity extends FragmentActivity
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private Marker marker;
+    private Vibrator vibrator;
     // View coordinatorLayoutView = findViewById(R.id.snackbarPosition);
 
     /**
@@ -84,6 +86,10 @@ public class MapsActivity extends FragmentActivity
 
         buildGoogleApiClient();
         mGoogleApiClient.connect();
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+// Vibrate for 300 milliseconds
+
 
     }
 
@@ -137,7 +143,8 @@ public class MapsActivity extends FragmentActivity
                         listItems.add(new classItem(json));
                         i++;
                     }
-
+                  //  listItems.add(new classItem(-31.412045, -64.178032,"trabajo",1,60,""));
+                   // listItems.add(new classItem(-31.410342, -64.177335,"cerca ",1,30,""));
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -155,11 +162,8 @@ public class MapsActivity extends FragmentActivity
 
         protected void onPostExecute(Boolean result) {
             progres.dismiss();
-            classItem it = (classItem) listItems.get(0);
             if (error != null) {
                 Toast.makeText(MapsActivity.this, error, Toast.LENGTH_LONG).show();
-                //if(error.compareTo("Compruebe su conexion de Internet")==0)
-                //  MainActivity.this.finish();
             }
             cargarItemsMaps(listItems);
         }
@@ -232,7 +236,6 @@ public class MapsActivity extends FragmentActivity
     }
 
 
-    //////////////////////////////////////////////////////////////////////
     @Override
     protected void onPause() {
         super.onPause();
@@ -308,14 +311,19 @@ public class MapsActivity extends FragmentActivity
             locationItem.setLatitude(item.getLocationLatitude());
             locationItem.setLongitude(item.getLocationLongitude());
             distancia = miLocation.distanceTo(locationItem);
-            if(distancia<= item.getRadiusInMeter()/2){
+            if(distancia<= item.getRadiusInMeter()){
                 if(FLAG_MENSAJE) {
                     Toast.makeText(MapsActivity.this, "Entraste en el rango del Arma " + item.getCode(), Toast.LENGTH_LONG).show();
+                    vibrator.vibrate(800);
                     FLAG_MENSAJE=false;
                 }
             }else {
                 contador++;
                 if(contador==listItems.size()){
+                    if(!FLAG_MENSAJE) {
+                        Toast.makeText(MapsActivity.this, "Estas fuera de peligro", Toast.LENGTH_LONG).show();
+                        vibrator.vibrate(800);
+                    }
                     FLAG_MENSAJE=true;
                 }
 
